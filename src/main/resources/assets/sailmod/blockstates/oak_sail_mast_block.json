@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "sailmod:block/oak_sail_mast_block"}
+  }
+}

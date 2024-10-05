@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "sailmod:block/oak_sail_mast_14"
+    "all": "sailmod:block/sail_yard_block"
   }
 }

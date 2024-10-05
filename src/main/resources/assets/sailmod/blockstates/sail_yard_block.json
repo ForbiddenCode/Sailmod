@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "sailmod:block/sail_yard_block"}
+  }
+}

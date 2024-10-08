@@ -67,21 +67,22 @@ public class SailMastBlock extends Block {
         if (!pLevel.isClientSide) {
             BlockPos belowPos = pPos.below();
             BlockPos abovePos = pPos.above();
-            if (mastManager.isPartOfMast(belowPos)) {
-//                pState.setValue(CONNECTED, true);
-                pLevel.setBlock(pPos, pState.setValue(CONNECTED, true), 3);
-                pLevel.setBlock(pPos.below(), pState.setValue(CONNECTED, true), 3);
+            if(mastManager.isPartOfMast(belowPos) && mastManager.isPartOfMast(abovePos)){
+                if(mastManager.getMastIdByPosition(belowPos) != mastManager.getMastIdByPosition(abovePos)){
+                    ThickMast existingMast = mastManager.getMast(belowPos);
+                    mastManager.addBlockToMast(pPos, existingMast);
+                    mastManager.addBlockToMastVisually(pLevel, existingMast);
+                    //convert the mast above to the mast below
+                    mastManager.moveModBlocksToMast(mastManager.getMastIdByPosition(abovePos),
+                            mastManager.getMastIdByPosition(belowPos));
+                }
+            } else if (mastManager.isPartOfMast(belowPos)) {
                 ThickMast existingMast = mastManager.getMast(belowPos);
                 mastManager.addBlockToMast(pPos, existingMast);
-                //mastManager.updateMastVisuals(pLevel, existingMast);
                 mastManager.addBlockToMastVisually(pLevel, existingMast);
             } else if(mastManager.isPartOfMast(abovePos)){
-//                pState.setValue(CONNECTED, true);
-                pLevel.setBlock(pPos, pState.setValue(CONNECTED, true), 3);
-                pLevel.setBlock(pPos.above(), pState.setValue(CONNECTED, true), 3);
                 ThickMast existingMast = mastManager.getMast(abovePos);
                 mastManager.addBlockToMast(pPos, existingMast);
-                //mastManager.updateMastVisuals(pLevel, existingMast);
                 mastManager.addBlockToMastVisually(pLevel, existingMast);
             } else {
                 ThickMast newMast = mastManager.createMast();
@@ -103,12 +104,14 @@ public class SailMastBlock extends Block {
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         //super.onRemove(state, world, pos, newState, isMoving);
 
-        if (!world.isClientSide) { // Only run this logic on the server side
+        if (!world.isClientSide && state.getValue(SailMastBlock.IS_PART_OF_MAST)) { // Only run this logic on the server side
             // Remove the block from its Mast
             ThickMast thickMast = mastManager.getMast(pos);
             if(thickMast != null) {
-                //mastManager.removeBlockFromMast(pos);
-//                mastManager.updateMastVisuals(world, thickMast);
+                mastManager.removeBlockFromMast(pos);
+                if(mastManager.isPartOfMast(pos.above()) && pos.above().getY() > pos.getY()){
+                    mastManager.removeBlockFromMastVisually(pos.above(), world, thickMast);
+                }
             }
         }
     }

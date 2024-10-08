@@ -23,6 +23,8 @@ public class MastManager {
         return mastMap.get(pos);
     }
 
+    public ThickMast getMast(int id){ return masts.get(id);}
+
     // Create a new Mast instance and add it to the manager
     public ThickMast createMast() {
         ThickMast thickMast = new ThickMast(nextMastId++);
@@ -49,16 +51,28 @@ public class MastManager {
     public boolean isPartOfMast(BlockPos pos) {
         return mastMap.containsKey(pos);
     }
-    public void updateMastVisuals(Level world, ThickMast mast) {
-        int mastSize = mast.getMastSize();
-        boolean isPartOfMast = mastSize > 1;
-        for (BlockPos pos : mast.getBlockPositions()) {
-            BlockState currentState = world.getBlockState(pos);
-            BlockState newState = currentState.setValue(SailMastBlock.IS_PART_OF_MAST, isPartOfMast);
-            // Update the block state in the world to trigger a visual update
-            world.setBlock(pos, newState, 3);
-            world.sendBlockUpdated(pos, newState, newState, 3);
+
+    public int getMastIdByPosition(BlockPos pos) {
+        ThickMast mast = mastMap.get(pos);
+        if (mast != null) {
+            return mast.getId();
         }
+        return 0;
+    }
+
+    public void moveModBlocksToMast(int sourceId, int targetId) {
+        ThickMast sourceMast = masts.get(sourceId);
+        ThickMast targetMast = masts.get(targetId);
+        if (sourceMast == null || targetMast == null) {
+            return;
+        }
+        for (BlockPos blockPos : sourceMast.getBlockPositions()) {
+            targetMast.addBlock(blockPos);
+            mastMap.put(blockPos, targetMast);
+        }
+        sourceMast.getBlockPositions().clear();
+        if (sourceMast.getBlockPositions().isEmpty()) {
+            masts.remove(sourceId);}
     }
 
     public  void addBlockToMastVisually(Level pLevel, ThickMast mast){
@@ -68,6 +82,13 @@ public class MastManager {
             pLevel.setBlock(pos, newState, 3);
             pLevel.sendBlockUpdated(pos, newState, newState, 3);
         }
+    }
+
+    public  void removeBlockFromMastVisually(BlockPos pos, Level pLevel, ThickMast mast){
+            BlockState currentState = pLevel.getBlockState(pos);
+            BlockState newState = currentState.setValue(SailMastBlock.IS_PART_OF_MAST, false);
+            pLevel.setBlock(pos, newState, 3);
+            pLevel.sendBlockUpdated(pos, newState, newState, 3);
     }
     // Additional logic for managing all masts
 }

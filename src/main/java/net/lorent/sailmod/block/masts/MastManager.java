@@ -1,5 +1,5 @@
 package net.lorent.sailmod.block.masts;
-import net.lorent.sailmod.block.custom.SailMastBlock;
+import net.lorent.sailmod.block.custom.ThickSailMastBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.Level;
@@ -78,7 +78,7 @@ public class MastManager {
     public  void addBlockToMastVisually(Level pLevel, ThickMast mast){
         for (BlockPos pos : mast.getBlockPositions()){
             BlockState currentState = pLevel.getBlockState(pos);
-            BlockState newState = currentState.setValue(SailMastBlock.IS_PART_OF_MAST, true);
+            BlockState newState = currentState.setValue(ThickSailMastBlock.IS_PART_OF_MAST, true);
             pLevel.setBlock(pos, newState, 3);
             pLevel.sendBlockUpdated(pos, newState, newState, 3);
         }
@@ -86,7 +86,7 @@ public class MastManager {
 
     public  void removeBlockFromMastVisually(BlockPos pos, Level pLevel, ThickMast mast){
             BlockState currentState = pLevel.getBlockState(pos);
-            BlockState newState = currentState.setValue(SailMastBlock.IS_PART_OF_MAST, false);
+            BlockState newState = currentState.setValue(ThickSailMastBlock.IS_PART_OF_MAST, false);
             pLevel.setBlock(pos, newState, 3);
             pLevel.sendBlockUpdated(pos, newState, newState, 3);
     }

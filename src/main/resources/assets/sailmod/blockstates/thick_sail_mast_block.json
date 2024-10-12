@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "thickness=16,is_part_of_mast=false": { "model": "sailmod:block/thick_sail_mast_block"},
+    "thickness=16,is_part_of_mast=true": { "model": "sailmod:block/thick_sail_mast_block_c"}
+  }
+}

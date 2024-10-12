@@ -5,17 +5,14 @@ import net.minecraft.core.BlockPos;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ThickMast {
-    // A unique identifier for each Mast instance (optional)
-    private final int id;
-    private boolean isLocked = false;
+public class ThickMast extends Mast {
     private int mastSize = 0;
 
     // Set of positions representing each block that belongs to this Mast
     private final Set<BlockPos> blockPositions = new HashSet<>();
 
     public ThickMast(int id) {
-        this.id = id;
+        super(id);
     }
 
     public int getMastSize(){
@@ -24,10 +21,8 @@ public class ThickMast {
 
     // Add a block to this Mast
     public void addBlock(BlockPos pos) {
-        if (!isLocked) {
             blockPositions.add(pos);
             mastSize++;
-        }
     }
 
     // Remove a block from this Mast

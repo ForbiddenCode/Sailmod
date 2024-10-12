@@ -1,7 +1,7 @@
 package net.lorent.sailmod.block;
 
 import net.lorent.sailmod.SailMod;
-import net.lorent.sailmod.block.custom.SailMastBlock;
+import net.lorent.sailmod.block.custom.ThickSailMastBlock;
 import net.lorent.sailmod.block.custom.SailYardBlock;
 import net.lorent.sailmod.item.ModCreativeModeTab;
 import net.lorent.sailmod.item.ModItems;
@@ -24,7 +24,7 @@ public class ModBlocks {
 
 
     public static final RegistryObject<Block> OAK_SAIL_MAST_BLOCK =
-            registerBlock("oak_sail_mast_block", () -> new SailMastBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion()),
+            registerBlock("thick_sail_mast_block", () -> new ThickSailMastBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion()),
                     ModCreativeModeTab.TUTORIAL_TAB);
     public static final RegistryObject<Block> SAIL_YARD_BLOCK =
             registerBlock("sail_yard_block", () -> new SailYardBlock(BlockBehaviour.Properties.of(Material.WOOD).noOcclusion()),

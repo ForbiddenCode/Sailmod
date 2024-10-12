@@ -21,44 +21,19 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SailMastBlock extends Block {
+public class ThickSailMastBlock extends Block {
     private static final MastManager mastManager = new MastManager();
-    public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
-    public static final IntegerProperty THICKNESS = IntegerProperty.create("thickness", 4, 14);
+    public static final IntegerProperty THICKNESS = IntegerProperty.create("thickness", 6, 16);
     public static final BooleanProperty IS_PART_OF_MAST = BooleanProperty.create("is_part_of_mast");
-    private static VoxelShape SHAPE = Block.box(1,0,1,15,16,15);
+    private static VoxelShape SHAPE = Block.box(0,0,0,16,16,16);
 
-    public SailMastBlock(Properties properties) {
+    public ThickSailMastBlock(Properties properties) {
         super(properties);
         // Register the default state of the block with the desired property values
         this.registerDefaultState(this.defaultBlockState()
-                .setValue(CONNECTED, false)
-                .setValue(THICKNESS, 14));
+                .setValue(THICKNESS, 16));
         this.registerDefaultState(this.stateDefinition.any().
                 setValue(IS_PART_OF_MAST, false));
-    }
-
-    @Override
-    public @NotNull InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos,
-                                          Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if(!pLevel.isClientSide() && pHand == InteractionHand.MAIN_HAND){
-            int currentThickness = pState.getValue(THICKNESS);
-            if(currentThickness > 4){
-                int offset = (16 - currentThickness + 2) / 2;
-                setSHAPE(SHAPE, offset);
-                pLevel.setBlock(pPos, pState.setValue(THICKNESS, currentThickness-2), 3);
-            } else {
-                int offset = 1;
-                setSHAPE(SHAPE, offset);
-                pLevel.setBlock(pPos, pState.setValue(THICKNESS, 14), 3);
-            }
-        }
-
-        /*if(!pLevel.isClientSide() && pHand == InteractionHand.MAIN_HAND){
-            boolean currentState = pState.getValue(CLICKED);
-            pLevel.setBlock(pPos, pState.setValue(CLICKED, !currentState), 3);
-        }*/
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -97,14 +72,14 @@ public class SailMastBlock extends Block {
     }
 
     public static void setSHAPE(VoxelShape SHAPE, int offset) {
-        SailMastBlock.SHAPE = Block.box(0 + offset, 0, 0 + offset, 16 - offset, 16, 16 - offset);
+        ThickSailMastBlock.SHAPE = Block.box(0 + offset, 0, 0 + offset, 16 - offset, 16, 16 - offset);
     }
 
     @Override
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         //super.onRemove(state, world, pos, newState, isMoving);
 
-        if (!world.isClientSide && state.getValue(SailMastBlock.IS_PART_OF_MAST)) { // Only run this logic on the server side
+        if (!world.isClientSide && state.getValue(ThickSailMastBlock.IS_PART_OF_MAST)) { // Only run this logic on the server side
             // Remove the block from its Mast
             ThickMast thickMast = mastManager.getMast(pos);
             if(thickMast != null) {
@@ -118,7 +93,7 @@ public class SailMastBlock extends Block {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(CONNECTED, IS_PART_OF_MAST, THICKNESS);
+        pBuilder.add(IS_PART_OF_MAST, THICKNESS);
     }
 
 
